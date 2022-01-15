@@ -228,7 +228,19 @@ return;
             mainmenu(); 
     }
 
+   } elseif ($accounttype == 'main')
+       {
+
+    print "$Green\nYour MAIN accounts\n";
+    $start=0; $end=2;
+
+    print "$Cyan\n1) [$accounts[0]]";
+    print "$Cyan\n2) [$accounts[1]]";
+    print "$Cyan\n3) [$accounts[2]]\n";
+
+    $maxaccounts=$accounts;  
    } else
+
    {
         printf("$Green\nYou have %s $accounttype account\n$Yellow",count($accounts));
         $start = readline("Start with account no.  : ");
@@ -1265,11 +1277,6 @@ function addpost2account($newaccounts, $posttype, $accounttype)
    } elseif ($accounttype == "main") {
 
     print "$Green\nYour MAIN accounts\n";
-//    $start = readline("Start with account no.  : ");
-//    if ($start == '') { $start=0;} else {$start--;}
-//    $end =   readline("End with account no.    : ");
-//    if ($end == '') { $end=count($newaccounts)-1;} else {$end--;}
-    
     $start=0; $end=2;
 
     print "$Cyan\n1) [$newaccounts[0]]";
