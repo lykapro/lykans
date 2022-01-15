@@ -632,11 +632,9 @@ print "\nMenu\n";
 print "-----------------------------";
 
 print "$White\na )$Cyan raters > main accounts";
-print "$White\nb )$Cyan raters > friends account";
-print "$White\nc )$Cyan main > main accounts";
-print "$White\nd )$Cyan main > friends account";
-print "$White\ne )$Cyan friends > friends account";
-print "$White\nf )$Cyan back to main";
+print "$White\nb )$Cyan main > raters accounts";
+print "$White\nc )$Cyan friends > friends account";
+print "$White\nd )$Cyan back to main";
 print "$White\n-----------------------------\n";
 
    print "Your selection > ";
@@ -644,33 +642,23 @@ print "$White\n-----------------------------\n";
 
    switch($inputtask) {
 
-
     case "a" : //raters to main
         max2max($ratersaccount,$mainaccounts);
         print "\n\n";
         mainmenu();        
 
-    case "b" : //raters to friends
-        max2u($ratersaccount,"Raters");     
-        print "\n\n";
-        mainmenu();    
-        
-    case "c" : //main to main
-        max2max($mainaccounts,$mainaccounts);
+    case "b" : //main to raters
+
+        main2main($mainaccounts,$ratersaccount);
         print "\n\n";
         mainmenu();     
     
-    case "d" : //main to main
-        max2u($mainaccounts,"Main");
-        print "\n\n";
-        mainmenu();     
-
-    case "e" : //friends to friends
+    case "c" : //friends to friends
         friendsaccount();     
         print "\n\n";
         mainmenu();        
     
-    case "f" : //friends
+    case "d" : //return to main
         @system("clear");
         mainmenu();        
             
@@ -735,6 +723,60 @@ function max2max($raters,$acct2rate)
     return;
 
 }   //end of max2max
+
+function main2main($raters, $acct2rate)
+{
+    
+    @system("clear");
+
+    $Cyan     = "\033[0;36m" ;        # Cyan
+    $White    = "\033[0;37m" ;       # White
+    $Green    = "\033[0;32m" ;       # Green
+    $Yellow   = "\033[0;33m" ;      # Yellow
+    
+    $ScriptName ="main > raters";
+    
+
+    print "$White";
+    print "$ScriptName\n";
+    print $GLOBALS['Webs'];
+    print "you are about to rate posts using your main accounts\n";
+    
+    print "\nYour MAIN account:\n";
+    $start=0;
+    $end=2;
+    print "$Green\n1) [$raters[0]]";
+    print "$Green\n2) [$raters[1]]";
+    print "$Green\n3) [$raters[2]]\n";
+
+    $acct2rate2=[];
+    array_push($acct2rate2,"$acct2rate[0]"); 
+    array_push($acct2rate2,"$acct2rate[1]"); 
+    array_push($acct2rate2,"$acct2rate[2]"); 
+    array_push($acct2rate2,"$raters[3]"); 
+
+    print "$White\nAccounts to rate\n";
+  
+    print "$Green\n1) [$acct2rate2[0]]";
+    print "$Green\n2) [$acct2rate2[1]]";
+    print "$Green\n3) [$acct2rate2[2]]";
+    print "$Green\n4) [$acct2rate2[3]]\n";
+
+
+    print "$Yellow\n";
+    print "Input MAIN account password\n$Green\n";
+  
+    $mainpassword=readline('Password : ');
+    if ($mainpassword == '')
+    {
+        print "$Yellow\n**empty password**\n\n";
+        mainmenu();    }
+
+    ratemypost($ScriptName,$Web,$raters,$mainpassword, $start, $end, $acct2rate2);
+    return;
+
+}   //end of main2main
+
 
 #   ///////////////////////////////////////////
 #   // max2u
@@ -1220,18 +1262,34 @@ function addpost2account($newaccounts, $posttype, $accounttype)
            }
     $end=count($acct2post)-1;
 
-   } else {
+   } elseif ($accounttype == "main") {
 
-    printf("$Green\nYou have %s $accounttype accounts\n$Yellow",count($newaccounts));
-    $start = readline("Start with account no.  : ");
-    if ($start == '') { $start=0;} else {$start--;}
-    $end =   readline("End with account no.    : ");
-    if ($end == '') { $end=count($newaccounts)-1;} else {$end--;}
-    print "$Cyan\nStart [$newaccounts[$start]]";
-    print "$Cyan\nEnd   [$newaccounts[$end]]\n";
+    print "$Green\nYour MAIN accounts\n";
+//    $start = readline("Start with account no.  : ");
+//    if ($start == '') { $start=0;} else {$start--;}
+//    $end =   readline("End with account no.    : ");
+//    if ($end == '') { $end=count($newaccounts)-1;} else {$end--;}
+    
+    $start=0; $end=2;
+
+    print "$Cyan\n1) [$newaccounts[0]]";
+    print "$Cyan\n2) [$newaccounts[1]]";
+    print "$Cyan\n3) [$newaccounts[2]]\n";
   
      $acct2post=$newaccounts; 
-    }
+    
+    } else {
+
+        printf("$Green\nYou have %s $accounttype accounts\n$Yellow",count($newaccounts));
+        $start = readline("Start with account no.  : ");
+        if ($start == '') { $start=0;} else {$start--;}
+        $end =   readline("End with account no.    : ");
+        if ($end == '') { $end=count($newaccounts)-1;} else {$end--;}
+        print "$Cyan\nStart [$newaccounts[$start]]";
+        print "$Cyan\nEnd   [$newaccounts[$end]]\n";
+      
+         $acct2post=$newaccounts; 
+        }
 
    print "$White";
    print "\nHow many $posttype(s) to add [default=10]\n";
