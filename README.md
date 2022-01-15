@@ -1,4 +1,4 @@
-# LYKAPRO Menu (usage is completely FREE)
+# LYKA Menu (usage is completely FREE)
 - install Termux from https://f-droid.org/packages/com.termux/
 - <i>after install, open termux, issue the command</i>
 - <b>$ termux-change-repo</b>
