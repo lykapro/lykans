@@ -34,9 +34,9 @@ array_push($mainaccounts,"indigo4083");
 #raters
 array_push($ratersaccount,"scarlet3919");
 array_push($ratersaccount,"blue3012");
-array_push($ratersaccount,"blue3780");
+array_push($ratersaccount,"blue7380");
 array_push($ratersaccount,"green0008");
-array_push($ratersaccount,"yellow5345");
+array_push($ratersaccount,"yellow5435");
 array_push($ratersaccount,"dandelion3836");
 array_push($ratersaccount,"black5320");
 array_push($ratersaccount,"pink4180");
@@ -242,7 +242,7 @@ return;
    } else
 
    {
-        printf("$Green\nYou have %s $accounttype account\n$Yellow",count($accounts));
+        printf("$Green\nYou have %s $accounttype account\n$Yellow\n",count($accounts));
         $start = readline("Start with account no.  : ");
         if ($start == '') { $start=0;} else {$start--;}
         $end =   readline("End with account no.    : ");
@@ -431,7 +431,7 @@ return;
     
        } else
        {
-        printf("$Green\nYou have %s $accounttype accounts\n$Yellow",count($accounts));
+        printf("$Green\nYou have %s $accounttype accounts\n$Yellow\n",count($accounts));
 
         $start = readline("Start with account no. : ");
         if ($start == '') { $start=0;} else {$start--;}
@@ -643,10 +643,10 @@ print $GLOBALS['Webs'];
 print "\nMenu\n";
 print "-----------------------------";
 
-print "$White\na )$Cyan raters > main accounts";
-print "$White\nb )$Cyan main > raters accounts";
-print "$White\nc )$Cyan friends > friends account";
-print "$White\nd )$Cyan back to main";
+print "$White\na )$Green raters to main accounts";
+print "$White\nb )$Green main to raters accounts";
+print "$White\nc )$Green friends to friends account";
+print "$White\nd )$Green back to main";
 print "$White\n-----------------------------\n";
 
    print "Your selection > ";
@@ -707,7 +707,7 @@ function max2max($raters,$acct2rate)
     print "max-rate posts\n";
     
     //should use one password per raters account
-    printf("$White\nYou have %s raters account\n$Green",count($raters));
+    printf("$White\nYou have %s raters account\n$Yellow\n",count($raters));
     $start = readline("Start with account no.  : ");
     if ($start == '') { $start=0;} else {$start--;}
     $end =   readline("End with account no.    : ");
@@ -754,7 +754,7 @@ function main2main($raters, $acct2rate)
     print $GLOBALS['Webs'];
     print "you are about to rate posts using your main accounts\n";
     
-    print "\nYour MAIN account:\n";
+    print "\nYour MAIN accounts\n";
     $start=0;
     $end=2;
     print "$Green\n1) [$raters[0]]";
@@ -835,7 +835,7 @@ function max2u($raters,$raterstype)
                 }
 
     //should use one password per raters account
-    printf("$Green\nYou have %s $raterstype account\n$Yellow",count($raters));
+    printf("$Green\nYou have %s $raterstype account\n$Yellow\n",count($raters));
     $start = readline("Start with account no.  : ");
     if ($start == '') { $start=0;} else {$start--;}
     $end =   readline("End with account no.    : ");
@@ -1277,17 +1277,18 @@ function addpost2account($newaccounts, $posttype, $accounttype)
    } elseif ($accounttype == "main") {
 
     print "$Green\nYour MAIN accounts\n";
-    $start=0; $end=2;
+    $start=0; $end=3;
 
     print "$Cyan\n1) [$newaccounts[0]]";
     print "$Cyan\n2) [$newaccounts[1]]";
-    print "$Cyan\n3) [$newaccounts[2]]\n";
+    print "$Cyan\n3) [$newaccounts[2]]";
+    print "$Cyan\n4) [$newaccounts[3]]\n";
   
      $acct2post=$newaccounts; 
     
     } else {
 
-        printf("$Green\nYou have %s $accounttype accounts\n$Yellow",count($newaccounts));
+        printf("$Green\nYou have %s $accounttype accounts\n$Yellow\n",count($newaccounts));
         $start = readline("Start with account no.  : ");
         if ($start == '') { $start=0;} else {$start--;}
         $end =   readline("End with account no.    : ");
@@ -1315,7 +1316,7 @@ function addpost2account($newaccounts, $posttype, $accounttype)
    if ($mainpassword == '')
    {
        print "$Yellow";
-       print "\n> no password was entered\n\n";
+       print "\n*no password was entered\n\n";
        mainmenu();  
    }
       
@@ -1431,7 +1432,7 @@ endif;
     if ($jsonn->message != "Invalid username/password")
     {
     print "$White\n";
-    print "Summary - add $posttype(s)\n";
+    print "summary - add $posttype(s)\n";
     checkgems($acct2post, $start, $end, $mainpassword);
     }
     else
@@ -1632,7 +1633,7 @@ function postmoments($currentuser, $bearer, $posttype, $accounttype) {
                     "isSharedLink":false,
                     "mediaTags":"[[]]",
                     title:"'.date("l").'",
-                    hashtags:"#ActiveLYKA",
+                    hashtags:"#LYKA #GEMs",
                     content: "'.date("d-m-Y").'"'),
                     $bearer);
                   } else
@@ -1648,9 +1649,9 @@ function postmoments($currentuser, $bearer, $posttype, $accounttype) {
                     "isHighlight":false,
                     "isSharedLink":false,
                     "mediaTags":"[[]]",
-                    title:"#LYKA",
-                    hashtags:"#LYKA GEMS",
-                    content: "'.date("l").'"'),
+                    title:"'.date("l").'",
+                    hashtags:"#ActiveLYKA'.date("l").'",
+                    content: "'.date("mdY").'"'),
                     $bearer);
                    } 
                 else : 
