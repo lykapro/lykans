@@ -1,5 +1,11 @@
 <?PHP
-$Webs="github.com/lykapro/lykans\n\n";
+//script is free to download and use
+//we only request to add our account to rate as Donation
+//so that development may still be possible in the future
+//do not replicate without written permission from the author
+//© 2022 LYKAPRO dev team
+
+$Webs="free for personal use only.\ndo not replicate, the programmer has exerted so much effort\nin creating this program.\n";
 
 @system("clear");
 
@@ -11,7 +17,7 @@ mainmenu();
 
 function mainmenu(){
 
-    @system("clear");
+@system("clear");
 
     // Regular Colors
 $Black    = "\033[0;30m" ;     //  # Black
