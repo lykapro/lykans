@@ -5,7 +5,7 @@
 //do not replicate without written permission from the author
 //© 2022 LYKAPRO dev team
 
-$Webs="**free for personal use only**\n**no unauthorized duplication without written consent**\n";
+$Webs="**free for personal use only**\n**no unauthorized duplication w/o written consent**\n";
 
 @system("clear");
 
@@ -173,7 +173,7 @@ print "$White\n-----------------------------\n$Yellow";
         mainmenu();      
     case "c" : //friends accounts
        
-        checkmaxgems($ratersaccount, "friends"); 
+      //  checkmaxgems($ratersaccount, "friends"); 
         print "\n\n";
         mainmenu();      
           
@@ -382,8 +382,7 @@ print "$White\n-----------------------------\n";
         harvestmaxgems($accounts, $mainaccounts, "raters"); 
         print "\n\n";
         mainmenu();      
-      case "b" : //friends
-        harvestmaxgems("", $mainaccounts, "friends"); 
+      case "b" :
         print "\n\n";
         mainmenu();      
       
@@ -675,7 +674,6 @@ print "$White\n-----------------------------\n";
         mainmenu();     
     
     case "c" : //friends to friends
-        friendsaccount();     
         print "\n\n";
         mainmenu();        
     
@@ -723,13 +721,6 @@ function max2max($raters,$acct2rate)
     if ($end == '') { $end=count($raters)-1;} else {$end--;}
     print "$Green\nStart [$raters[$start]]";
     print "$Green\nEnd   [$raters[$end]]\n";
-
-//    $newraters=[];
-//      $x=$start;
-//    do {
-//        array_push($newraters,$raters[$x]);
-//            $x++;
-//    } while ($x != $end+1);
 
     print "$Yellow\n";
     print "Input RATERS password\n$Green\n";
@@ -867,81 +858,6 @@ function max2u($raters,$raterstype)
 } //end of max2u
 
 
-function friendsaccount()
-{
-    @system("clear");
-
-    $Cyan     = "\033[0;36m" ;        # Cyan
-    $White    = "\033[0;37m" ;        # White
-    $Green    = "\033[0;32m" ;        # Green
-    $Yellow   = "\033[0;33m" ;        # Yellow
-    
-    $ScriptName ="Rate Friends Account \n© 2022 LYKAPRO dev team";
-  
-
-print "$White";
-print "$ScriptName\n";
-print $GLOBALS['Webs'];
-print "this routine will help you rate the post of your friend\n";
-
-$acct2rate=[];
-$acct=0;
-
-print "$Green\n";
-print "Friends account to RATE$Yellow [max of 4]$Green\n";
-print "press enter when done\n$Yellow\n";
-do {
-    $inputusername = readline("Username : ");
-    if ($inputusername !='') {
-        array_push($acct2rate, "$inputusername",);
-        $acct++;
-    } else { break;}
-} while ($acct != 4);
- 
- if ($acct == 0)  {
-     print "$Yellow";
-     print "**no account entered\n\n";
-        mainmenu(); 
-        }
-
-$raters = [];
-$usr=0;
-print "$Cyan\n";
-print "Raters account username\n";
-print "enter blank when done\n$Green\n";
-do {
-   $username = readline('Username : ');
-  if ($username !='') {
-   array_push($raters, "$username",);
-   $usr=1;
-   }
-} while ($username !='');
-
-if ($usr != 1)
-{
-    print "$Yellow\n";
-    print "no RATERS account entered\n";
-    print "pls. enter atleast one (1) account\n\n";
-    mainmenu();
-}
-
-#should use one password for all accounts
-print "$Yellow\n";
-print "Raters account password\n$Green\n";
-$mainpassword=readline('Password : ');
-if ($mainpassword == '')
-{
-    print "$Yellow";
-    print "\n**empty password**\n\n";
-        mainmenu();
-}
-$start=0;
-$end = count($raters);
-
-ratemypost($ScriptName, $Web, $raters, $mainpassword, $start, $end, $acct2rate);
-return;
-
-} //end of friends2friends
 
 
    #///////////////////////////////////////////
@@ -1216,11 +1132,10 @@ print "$White\n-----------------------------\n";
         print "\n\n";
         exit;
       
-      case "c" : //post to friends 
-    
-       addpost2account($ratersaccount,"$posttype","friends");
+      case "c" : //
+       
        print "\n\n";
-       exit;
+       mainmenu();
 
       case "d" :
        @system("clear");
