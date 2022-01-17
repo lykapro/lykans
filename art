@@ -5,7 +5,7 @@
 //do not replicate without written permission from the author
 //© 2022 LYKAPRO dev team
 
-$Webs="free for personal use only.\ndo not replicate, the programmer has exerted so much effort\nin creating this program.\n";
+$Webs="**free for personal use only**\n**no unauthorized duplication without written consent**\n";
 
 @system("clear");
 
