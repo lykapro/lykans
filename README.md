@@ -13,7 +13,7 @@
 - <b>$ git clone https://github.com/lykapro/lykans</b>
 - start adding moments, posts and rating posts, issue the command 
 - (1) <b>$ cd lykans</b>
-- (2) <b>$ php artemis.php</b>
+- (2) <b>$ php art</b>
 - next time you open Termux, just run the commands from #1 to #2
 - Note: keep updated, always download the latest script
 - Issue the commands
