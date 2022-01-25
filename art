@@ -15,152 +15,6 @@ mainmenu();
 
 }
 
-function mainmenu(){
-
-@system("clear");
-
-    // Regular Colors
-$Black    = "\033[0;30m" ;     //  # Black
-$CRed     = "\033[0;31m" ;     //  # Red
-$Blue     = "\033[0;34m" ;         # Blue
-$Cyan     = "\033[0;36m" ;         # Cyan
-$White    = "\033[0;37m" ;         # White
-$Green    = "\033[0;32m" ;         # Green
-$Yellow   = "\033[0;33m" ;         # Yellow
-
-$mainaccounts=[];
-$ratersaccount=[];
-
-#my accounts
-array_push($mainaccounts,"k_art3553");
-array_push($mainaccounts,"kangleon3886");
-array_push($mainaccounts,"art3552");
-array_push($mainaccounts,"indigo4083");
-
-#raters
-array_push($ratersaccount,"scarlet3919");
-array_push($ratersaccount,"blue3012");
-array_push($ratersaccount,"blue7380");
-array_push($ratersaccount,"green0008");
-array_push($ratersaccount,"yellow5435");
-array_push($ratersaccount,"dandelion3836");
-array_push($ratersaccount,"black5320");
-array_push($ratersaccount,"pink4180");
-array_push($ratersaccount,"orange4182");
-array_push($ratersaccount,"white4102");
-array_push($ratersaccount,"apricot3825");
-array_push($ratersaccount,"red4196");
-array_push($ratersaccount,"gray5313");
-array_push($ratersaccount,"silver4086");
-array_push($ratersaccount,"gold4079");
-array_push($ratersaccount,"rose3532");
-array_push($ratersaccount,"redviolet3823");
-array_push($ratersaccount,"bluegreen4057");
-array_push($ratersaccount,"maroon2939");
-array_push($ratersaccount,"lime3548");
-array_push($ratersaccount,"violet3885");
-array_push($ratersaccount,"chocolate6584");
-array_push($ratersaccount,"emerald3262");
-array_push($ratersaccount,"ivory3839");
-array_push($ratersaccount,"navyblue3840");
-array_push($ratersaccount,"peach3834");
-
-//new
-
-//array_push($ratersaccount,"lily4191");
-
-array_push($ratersaccount,"chrysanthemum4055");
-array_push($ratersaccount,"sunflower8920");
-array_push($ratersaccount,"anemone3988");
-array_push($ratersaccount,"rose1626");
-array_push($ratersaccount,"puppy1643");
-array_push($ratersaccount,"dahlia4099");
-array_push($ratersaccount,"orchid4129");
-array_push($ratersaccount,"lilac1273");
-array_push($ratersaccount,"peony1424");
-array_push($ratersaccount,"azalea4003");
-array_push($ratersaccount,"daisy4066");
-array_push($ratersaccount,"jasmine3718");
-array_push($ratersaccount,"pansy4294");
-array_push($ratersaccount,"lavender8965");
-array_push($ratersaccount,"7wzzeisr8419");
-array_push($ratersaccount,"aster4131");
-array_push($ratersaccount,"tulip3723");
-array_push($ratersaccount,"carnation4091");
-array_push($ratersaccount,"dog0600");
-array_push($ratersaccount,"buttercup4262");
-array_push($ratersaccount,"iris4247");
-array_push($ratersaccount,"calalily4294");
-array_push($ratersaccount,"hyacinth3800");
-array_push($ratersaccount,"hibiscus3801");
-array_push($ratersaccount,"marigold4280");
-
-
-
-
-
-$ScriptName ="LYKA Menu build [01.24.22]\n© 2022 LYKAPRO dev team";
-
-print "$White";
-print "$ScriptName\n";
-print $GLOBALS['Webs'];
-    
-print "$White\nMAIN MENU";
-print "$White\n-----------------------------";
-
-print "$White\na )$Green add posts";
-print "$White\nb )$Green add moments";
-print "$White\nc )$Green posts rating";
-print "$White\nd )$Green check accounts";
-print "$White\ne )$Green harvest gems";
-print "$White\nf )$Green exit menu";
-print "$White\n-----------------------------\n$Yellow";
-
-   print "Your selection > ";
-   fscanf(STDIN, "%c",$inputtask);
-   
-   switch($inputtask) {
-
-       
-    case "a" : //add posts
-       
-        addpostmomentMenu("post",$ratersaccount,$mainaccounts);
-        print "\n\n";
-        mainmenu();
-               
-    case "b" : //add moments
-        
-        addpostmomentMenu("moment",$ratersaccount,$mainaccounts);
-        print "\n\n";
-        mainmenu();
-
-    case "c" : //raters to main
-        
-        ratepostmenu($ratersaccount,$mainaccounts);
-        print "\n\n";
-        mainmenu();
-
-    case "d" :     
-        checkgemsmenu($ratersaccount, $mainaccounts);
-        print "\n\n";
-        mainmenu();
-    case "e" :
-        
-        harvestgemsmenu($ratersaccount, $mainaccounts);
-        print "\n\n";
-        mainmenu();
-    case "f" :
-        print "\nthank you";
-        print "\nscript exits\n$White\n";
-        exit;  
-    default :
-
-        @system("clear");
-        mainmenu();
-
-   } //end of switch..case
-
-} //mainmenu
 
   # ///////////////////////////////////////////
   # // checkgems
@@ -1734,5 +1588,183 @@ function getgembalance($bearer)
     return $gemsavailable; 
 
 } //end of getgembalance
+
+
+
+function mainmenu(){
+
+@system("clear");
+
+    // Regular Colors
+$Black    = "\033[0;30m" ;     //  # Black
+$CRed     = "\033[0;31m" ;     //  # Red
+$Blue     = "\033[0;34m" ;         # Blue
+$Cyan     = "\033[0;36m" ;         # Cyan
+$White    = "\033[0;37m" ;         # White
+$Green    = "\033[0;32m" ;         # Green
+$Yellow   = "\033[0;33m" ;         # Yellow
+
+$mainaccounts=[];
+$ratersaccount=[];
+
+#my accounts
+array_push($mainaccounts,"k_art3553");
+array_push($mainaccounts,"kangleon3886");
+array_push($mainaccounts,"art3552");
+array_push($mainaccounts,"indigo4083");
+
+#raters
+array_push($ratersaccount,"scarlet3919");
+array_push($ratersaccount,"blue3012");
+array_push($ratersaccount,"blue7380");
+array_push($ratersaccount,"green0008");
+array_push($ratersaccount,"yellow5435");
+array_push($ratersaccount,"dandelion3836");
+array_push($ratersaccount,"black5320");
+array_push($ratersaccount,"pink4180");
+array_push($ratersaccount,"orange4182");
+array_push($ratersaccount,"white4102");
+array_push($ratersaccount,"apricot3825");
+array_push($ratersaccount,"red4196");
+array_push($ratersaccount,"gray5313");
+array_push($ratersaccount,"silver4086");
+array_push($ratersaccount,"gold4079");
+array_push($ratersaccount,"rose3532");
+array_push($ratersaccount,"redviolet3823");
+array_push($ratersaccount,"bluegreen4057");
+array_push($ratersaccount,"maroon2939");
+array_push($ratersaccount,"lime3548");
+array_push($ratersaccount,"violet3885");
+array_push($ratersaccount,"chocolate6584");
+array_push($ratersaccount,"emerald3262");
+array_push($ratersaccount,"ivory3839");
+array_push($ratersaccount,"navyblue3840");
+array_push($ratersaccount,"peach3834");
+
+//new
+
+//array_push($ratersaccount,"lily4191");
+
+array_push($ratersaccount,"chrysanthemum4055");
+array_push($ratersaccount,"sunflower8920");
+array_push($ratersaccount,"anemone3988");
+array_push($ratersaccount,"rose1626");
+array_push($ratersaccount,"puppy1643");
+array_push($ratersaccount,"dahlia4099");
+array_push($ratersaccount,"orchid4129");
+array_push($ratersaccount,"lilac1273");
+array_push($ratersaccount,"peony1424");
+array_push($ratersaccount,"azalea4003");
+array_push($ratersaccount,"daisy4066");
+array_push($ratersaccount,"jasmine3718");
+array_push($ratersaccount,"pansy4294");
+array_push($ratersaccount,"lavender8965");
+array_push($ratersaccount,"7wzzeisr8419");
+array_push($ratersaccount,"aster4131");
+array_push($ratersaccount,"tulip3723");
+array_push($ratersaccount,"carnation4091");
+array_push($ratersaccount,"dog0600");
+array_push($ratersaccount,"buttercup4262");
+array_push($ratersaccount,"iris4247");
+array_push($ratersaccount,"calalily4294");
+array_push($ratersaccount,"hyacinth3800");
+array_push($ratersaccount,"hibiscus3801");
+array_push($ratersaccount,"marigold4280");
+//01.25.2022
+
+//array_push($ratersaccount,"milei8933");
+array_push($ratersaccount,"lola8956");
+array_push($ratersaccount,"lucy8927");
+array_push($ratersaccount,"rosie8922");
+array_push($ratersaccount,"daisy8924");
+
+array_push($ratersaccount,"frankie8921");
+array_push($ratersaccount,"moly8955");
+array_push($ratersaccount,"ruby4037");
+array_push($ratersaccount,"coco4246");
+array_push($ratersaccount,"luna7655");
+
+array_push($ratersaccount,"bella1668");
+array_push($ratersaccount,"alfie0318");
+array_push($ratersaccount,"leo1325");
+array_push($ratersaccount,"teddy3796");
+array_push($ratersaccount,"oscar1323");
+
+array_push($ratersaccount,"olie1668");
+array_push($ratersaccount,"archie4197");
+array_push($ratersaccount,"milo1435");
+array_push($ratersaccount,"buddy1328");
+array_push($ratersaccount,"max4136");
+
+array_push($ratersaccount,"charlie0598");
+
+
+
+$ScriptName ="LYKA Menu updated [01.25.22]\n© 2022 LYKAPRO dev team";
+
+print "$White";
+print "$ScriptName\n";
+print $GLOBALS['Webs'];
+    
+print "$White\nMAIN MENU";
+print "$White\n-----------------------------";
+
+print "$White\na )$Green add posts";
+print "$White\nb )$Green add moments";
+print "$White\nc )$Green posts rating";
+print "$White\nd )$Green check accounts";
+print "$White\ne )$Green harvest gems";
+print "$White\nf )$Green exit menu";
+print "$White\n-----------------------------\n$Yellow";
+
+   print "Your selection > ";
+   fscanf(STDIN, "%c",$inputtask);
+   
+   switch($inputtask) {
+
+       
+    case "a" : //add posts
+       
+        addpostmomentMenu("post",$ratersaccount,$mainaccounts);
+        print "\n\n";
+        mainmenu();
+               
+    case "b" : //add moments
+        
+        addpostmomentMenu("moment",$ratersaccount,$mainaccounts);
+        print "\n\n";
+        mainmenu();
+
+    case "c" : //raters to main
+        
+        ratepostmenu($ratersaccount,$mainaccounts);
+        print "\n\n";
+        mainmenu();
+
+    case "d" :     
+        checkgemsmenu($ratersaccount, $mainaccounts);
+        print "\n\n";
+        mainmenu();
+    case "e" :
+        
+        harvestgemsmenu($ratersaccount, $mainaccounts);
+        print "\n\n";
+        mainmenu();
+    case "f" :
+        print "\nthank you";
+        print "\nscript exits\n$White\n";
+        exit;  
+    default :
+
+        @system("clear");
+        mainmenu();
+
+   } //end of switch..case
+
+} //mainmenu
+
+
+
+
 
 ?>
