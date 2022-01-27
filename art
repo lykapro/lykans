@@ -1052,7 +1052,6 @@ function addpost2account($newaccounts, $posttype, $accounttype)
    
    $ScriptName ="ADD POSTS/MOMENT ROUTINE\n© 2022 LYKAPRO dev team";
    
-   
    $acct=0;
    
    print "$White";
@@ -1144,7 +1143,6 @@ function addpost2account($newaccounts, $posttype, $accounttype)
 } //end of postit
 //////////////////////////////////////////////////////////////////////////////////
 
-
 function loop2accounts($acct2post, $mainpassword, $posttype, $postcount, $accounttype, $start, $end)
 {
 
@@ -1160,90 +1158,92 @@ function loop2accounts($acct2post, $mainpassword, $posttype, $postcount, $accoun
     $noofaccounts=$end+1; //count($acct2post);
     $posted=$start;
 
-   do {
+   do {   //loop to each username
       
         $currentuser=$acct2post[$posted];
         $posted++;
-    
 
-    //Login to account
+        //Login to account
     $jsonn = logintoaccount($currentuser,$mainpassword);
     
+    if ($jsonn != NULL)
+    {
     if ($jsonn->message != "Invalid username/password") :
  
-    print "$White\n";
-    printf("%-5s (%2s/%-2s) | %-15s\n","User",$posted, $noofaccounts,$currentuser);
-
-    print "$Green\n";
-    
     $msgn = $jsonn->message;
     $status = $jsonn->status;
-    $vuser = $jsonn->data->username;
+    $vuser = $jsonn->data->user->userName;
+    $userid=$jsonn->data->user->id;
     $bearer = $jsonn->data->token->accessToken;
-    
-     //     print "$White";
-     //     printf("%-13s | %.2f\n","Lyka Gems",getgembalance($bearer));
-     //     printf("%-13s |$Cyan %s\n\n","Status",$msgn);
-    
+
+    print "$White\n";
+    printf("%-4s (%2s/%-2s) | %-15s\n","User",$posted, $noofaccounts,$vuser);
+
+    print "$Green\n";
+   
      $postloop=1;
      $postretry=1;
-     do {  
+
+     do {  //loop x times to add post/moment
         
        print "$White";
-       printf(".%-6s #%-2s  > ",$posttype,$postloop);
+       printf("adding %-6s #%-2s  > ",$posttype,$postloop);
 
-//       $deviceid = uniqid('daf');
-         
        print "$Green";
        
-         $poststatus = postmoments($vuser, $bearer, $posttype, $accounttype);
+         $poststatus = postmoments($userid, $bearer, $posttype, $accounttype);
        
-         if ($poststatus !='')
-         {
-         if (strstr($poststatus,"Too many")) {
-             print "$Yellow";
-		 print "retrying ($postretry)";
-             sleep(5);
-             $postloop--;
-             $postretry++; 
-          } elseif ($poststatus == "Forbidden")
-          {
-             print "$Yellow";
-		 print "retrying ($postretry)";
-             sleep(5);
-             $postloop--;
-             $postretry++; 
-          }
-          else {
-           print "$poststatus";
-         }
-        }  else { print "error"; }
-         
+//        if ($poststatus != '')    {
+        if ($poststatus == "saved")
+        {
+          print "success";
+          $postretry =1;
+
+        } else
+
+        {
+            print "$Yellow";
+            print "error, retrying ($postretry)";
+            sleep(5);
+            $postloop--;
+            $postretry++;
+        }
+    
+//    } 
+
          print "\n";
         
          $postloop++;
     
-    } while ($postloop !=$postcount+1);
+    } while ($postloop != $postcount+1);
     
   //  print "$Yellow";
   //  print "\nadd $posttype to [$currentuser] done";
     
 else :
     print "$Green\n$jsonn->message\n";
-    break;    
+   // break;    
 endif;
+
+}
+else {                      //jsonn == NULL
+    print "$Green\nError\n";
+  //  break;
+}
 
     print "\n$White";
     print "--------------------------------\n";
     usleep(100000);
     
-    } while ($posted != $end+1); 
+} while ($posted != $end+1); 
     //end of loop for x username
     
+    if ($jsonn != NULL)
+    {
     if ($jsonn->message != "Invalid username/password")
     {
     print "$White\n";
-    print "summary - add $posttype(s)\n";
+    print "Summary - add $posttype(s)\n";
     checkgems($acct2post, $start, $end, $mainpassword);
     }
     else
@@ -1251,242 +1251,273 @@ endif;
     print "\n$White";
     $x=readline("press enter to continue");
     }
+    } else {
+
+    print "\n$White";
+    $x=readline("error encountered. press enter to continue");
+    
+    }
 
     mainmenu();
 
 } // loop2accts
 
+function postmoments($userid, $bearer, $posttype, $accounttype) {
 
-function postmoments($currentuser, $bearer, $posttype, $accounttype) {
-
-   $deviceid=uniqid('eaf');
+    $deviceid=uniqid('fff');
+     
+    $currUsrID = $userid;
     
-   $currUsrID = getUserId($deviceid, $bearer);
-
-   $uploadLegacy = "https://media.mylykaapps.com/api/v1/media/social/multi-upload-url";
-   
-   $uploadPay = <<<DATA
-       {"category":"$posttype",
-        "clientId":"$currUsrID",
-        "files":[{
-            "fileName":"https://github.com/maximum001/images/blob/main/p1.jpeg", 
-            "mediaType":"image"}]        }
-   DATA; 
-   
-   $uploadLegPost = postX($uploadLegacy,$uploadPay,$bearer);
- 
-   if($uploadLegPost->data){
-       $mediaID = $uploadLegPost->data[0]->mediaId;
-
-       $amznToken = "https://media.mylykaapps.com/api/v1/access/aws/media-token/$currUsrID";
-       $firstGet = getX($amznToken,$deviceid,$bearer);
-
-       if($firstGet->data){
-           $amzIDid = $firstGet->data->identityId;
-           $amzIDtoken = $firstGet->data->token; 
-
-           $postURL = "https://cognito-identity.ap-southeast-1.amazonaws.com/";
-           $postHeader =  array(
-           "Content-Type: application/x-amz-json-1.1",
-           "Accept-encoding: indentity",
-           "X-Amz-Target: AWSCognitoIdentityService.GetCredentialsForIdentity",
-           "user-agent: aws-sdk-android/2.22.4 Linux/3.18.140-gb765813d2c04 Dalvik/2.1.0/0 en_US") ;
-           $amndata = <<<DATA
-                   {"Logins": {
-                       "cognito-identity.amazonaws.com": "$amzIDtoken"},
-                           "IdentityId": "$amzIDid"}
-                   DATA; 
-           $postCurl = curl_init($postURL);
-           curl_setopt($postCurl, CURLOPT_URL, $postURL);
-           curl_setopt($postCurl, CURLOPT_POST, true);
-           curl_setopt($postCurl, CURLOPT_RETURNTRANSFER, true);
-           curl_setopt($postCurl, CURLOPT_HTTPHEADER, $postHeader);
-           curl_setopt($postCurl, CURLOPT_POSTFIELDS, $amndata);
-           $postResp = curl_exec($postCurl);
-           curl_close($postCurl);
-           $postjson = json_decode($postResp);
-
-           if($postjson->Credentials){
-               $sessToken = $postjson->Credentials->SessionToken;
-               $aws_access_key_id = $postjson->Credentials->AccessKeyId;
-               $aws_secret_access_key = $postjson->Credentials->SecretKey;
-
-               //AWS Process
-               $bucket_name = 'lyka-legacy-images-input';
-               $aws_region = 'ap-southeast-1';
-               $host_name = $bucket_name . '.s3.amazonaws.com';
-               $content = "0";
-               $content_title = $mediaID;
-               $aws_service_name = 's3';
-               $timestamp = gmdate('Ymd\THis\Z');
-               $date = gmdate('Ymd');
-               $request_headers = array();
-               $request_headers['x-amz-date'] = $timestamp;
-               $request_headers['Host'] = $host_name;
-               $request_headers['x-amz-security-token'] = $sessToken;
-               $request_headers['x-amz-content-sha256'] = hash('sha256', $content);
-               ksort($request_headers);
-
-               $canonical_headers = [];
-               foreach($request_headers as $key => $value) {
-                   $canonical_headers[] = strtolower($key) . ":" . $value;
-               }
-               $canonical_headers = implode("\n", $canonical_headers);
-
-               // Signed headers
-               $signed_headers = [];
-               foreach($request_headers as $key => $value) {
-                   $signed_headers[] = strtolower($key);
-               }
-               $signed_headers = implode(";", $signed_headers);
-
-               // Cannonical request 
-               $canonical_request = [];
-               $canonical_request[] = "PUT";
-               $canonical_request[] = "/" . $content_title;
-               $canonical_request[] = "";
-               $canonical_request[] = $canonical_headers;
-               $canonical_request[] = "";
-               $canonical_request[] = $signed_headers;
-               $canonical_request[] = hash('sha256', $content);
-               $canonical_request = implode("\n", $canonical_request);
-               $hashed_canonical_request = hash('sha256', $canonical_request);
-
-               // AWS Scope
-               $scope = [];
-               $scope[] = $date;
-               $scope[] = $aws_region;
-               $scope[] = $aws_service_name;
-               $scope[] = "aws4_request";
-
-               // String to sign
-               $string_to_sign = [];
-               $string_to_sign[] = "AWS4-HMAC-SHA256"; 
-               $string_to_sign[] = $timestamp; 
-               $string_to_sign[] = implode('/', $scope);
-               $string_to_sign[] = $hashed_canonical_request;
-               $string_to_sign = implode("\n", $string_to_sign);
-
-               // Signing key
-               $kSecret = 'AWS4' . $aws_secret_access_key;
-               $kDate = hash_hmac('sha256', $date, $kSecret, true);
-               $kRegion = hash_hmac('sha256', $aws_region, $kDate, true);
-               $kService = hash_hmac('sha256', $aws_service_name, $kRegion, true);
-               $kSigning = hash_hmac('sha256', 'aws4_request', $kService, true);
-
-               // Signature
-               $signature = hash_hmac('sha256', $string_to_sign, $kSigning);
-
-               // Authorization
-               $authorization = [
-                   'Credential=' . $aws_access_key_id . '/' . implode('/', $scope),
-                   'SignedHeaders=' . $signed_headers,
-                   'Signature=' . $signature
-               ];
-               $authorization = 'AWS4-HMAC-SHA256' . ' ' . implode( ',', $authorization);
-
-               // Curl headers
-               $curl_headers = [ 'Authorization: ' . $authorization ];
-               foreach($request_headers as $key => $value) {
-                   $curl_headers[] = $key . ": " . $value; }
-
-               $url = 'https://' . $host_name . '/' . $content_title;
-               $ch = curl_init($url);
-               curl_setopt($ch, CURLOPT_HEADER, false);
-               curl_setopt($ch, CURLOPT_HTTPHEADER, $curl_headers);
-               curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
-               curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-               curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-               curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
-               curl_setopt($ch, CURLOPT_POSTFIELDS, $content);
-               curl_exec($ch);
-               $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-               // print $http_code;
-               if ($http_code != 200) { print "failed\n"; }
-               
-               $delURL = "https://lyka-legacy-images-input.s3.ap-southeast-1.amazonaws.com/".$mediaID;
-               $delHeader = array(
-                   "x-clientid: $deviceid",
-                   "x-amz-date: $timestamp",
-                   "x-amz-content-sha256: STREAMING-AWS4-HMAC-SHA256-PAYLOAD",
-                   "Authorization: $authorization"
-               );
-               $deleteCurlx = curl_init($delURL);
-               curl_setopt($deleteCurlx, CURLOPT_URL, $delURL);
-               curl_setopt($deleteCurlx, CURLOPT_RETURNTRANSFER, true);
-               curl_setopt($deleteCurlx, CURLOPT_CUSTOMREQUEST, "PUT");
-               curl_setopt($deleteCurlx, CURLOPT_HTTPHEADER, $delHeader);
-               $deleteResp = curl_exec($deleteCurlx);
-               curl_close($deleteCurlx);
+    $uploadLegacy = "https://media.mylykaapps.com/api/v1/media/social/multi-upload-url";
+    
+    $uploadPay = <<<DATA
+        {"category":"$posttype",
+         "clientId":"$currUsrID",
+         "files":[{
+             "fileName":"https://github.com/maximum001/images/blob/main/p1.jpeg", 
+             "mediaType":"image"}] }
+    DATA; 
+    
+    $uploadLegPost = postX($uploadLegacy,$uploadPay,$bearer);
+    
+    
+    if ($uploadLegPost != NULL)
+    {
+    
+    
+    // var_dump($uploadLegPost);
+    // exit;
+    
+    if($uploadLegPost->data){
+        $mediaID = $uploadLegPost->data[0]->mediaId;
+    
+        $amznToken = "https://media.mylykaapps.com/api/v1/access/aws/media-token/$currUsrID";
+        $firstGet = getX($amznToken,$deviceid,$bearer);
+    
+    
+    
+        //if($firstGet->data){
+        if ($firstGet != NULL) {
+         $amzIDid = $firstGet->data->identityId;
+            $amzIDtoken = $firstGet->data->token; 
+    
+            $postURL = "https://cognito-identity.ap-southeast-1.amazonaws.com/";
+            $postHeader =  array(
+            "Content-Type: application/x-amz-json-1.1",
+            "Accept-encoding: indentity",
+            "X-Amz-Target: AWSCognitoIdentityService.GetCredentialsForIdentity",
+            "user-agent: aws-sdk-android/2.22.4 Linux/3.18.140-gb765813d2c04 Dalvik/2.1.0/0 en_US") ;
+            $amndata = <<<DATA
+                    {"Logins": {
+                        "cognito-identity.amazonaws.com": "$amzIDtoken"},
+                            "IdentityId": "$amzIDid"}
+                    DATA; 
+            $postCurl = curl_init($postURL);
+            curl_setopt($postCurl, CURLOPT_URL, $postURL);
+            curl_setopt($postCurl, CURLOPT_POST, true);
+            curl_setopt($postCurl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($postCurl, CURLOPT_HTTPHEADER, $postHeader);
+            curl_setopt($postCurl, CURLOPT_POSTFIELDS, $amndata);
+            $postResp = curl_exec($postCurl);
+            curl_close($postCurl);
+            $postjson = json_decode($postResp);
+    
+            //var_dump($postjson);
+            //exit;
+    
+           // if($postjson->Credentials){
+    
+             if ($postjson !=NULL)
+             {
+                $sessToken = $postjson->Credentials->SessionToken;
+                $aws_access_key_id = $postjson->Credentials->AccessKeyId;
+                $aws_secret_access_key = $postjson->Credentials->SecretKey;
+    
+                //AWS Process
+                $bucket_name = 'lyka-legacy-images-input';
+                $aws_region = 'ap-southeast-1';
+                $host_name = $bucket_name . '.s3.amazonaws.com';
+                $content = "0";
+                $content_title = $mediaID;
+                $aws_service_name = 's3';
+                $timestamp = gmdate('Ymd\THis\Z');
+                $date = gmdate('Ymd');
+                $request_headers = array();
+                $request_headers['x-amz-date'] = $timestamp;
+                $request_headers['Host'] = $host_name;
+                $request_headers['x-amz-security-token'] = $sessToken;
+                $request_headers['x-amz-content-sha256'] = hash('sha256', $content);
+                ksort($request_headers);
+    
+                $canonical_headers = [];
+                foreach($request_headers as $key => $value) {
+                    $canonical_headers[] = strtolower($key) . ":" . $value;
+                }
+                $canonical_headers = implode("\n", $canonical_headers);
+    
+                // Signed headers
+                $signed_headers = [];
+                foreach($request_headers as $key => $value) {
+                    $signed_headers[] = strtolower($key);
+                }
+                $signed_headers = implode(";", $signed_headers);
+    
+                // Cannonical request 
+                $canonical_request = [];
+                $canonical_request[] = "PUT";
+                $canonical_request[] = "/" . $content_title;
+                $canonical_request[] = "";
+                $canonical_request[] = $canonical_headers;
+                $canonical_request[] = "";
+                $canonical_request[] = $signed_headers;
+                $canonical_request[] = hash('sha256', $content);
+                $canonical_request = implode("\n", $canonical_request);
+                $hashed_canonical_request = hash('sha256', $canonical_request);
+    
+                // AWS Scope
+                $scope = [];
+                $scope[] = $date;
+                $scope[] = $aws_region;
+                $scope[] = $aws_service_name;
+                $scope[] = "aws4_request";
+    
+                // String to sign
+                $string_to_sign = [];
+                $string_to_sign[] = "AWS4-HMAC-SHA256"; 
+                $string_to_sign[] = $timestamp; 
+                $string_to_sign[] = implode('/', $scope);
+                $string_to_sign[] = $hashed_canonical_request;
+                $string_to_sign = implode("\n", $string_to_sign);
+    
+                // Signing key
+                $kSecret = 'AWS4' . $aws_secret_access_key;
+                $kDate = hash_hmac('sha256', $date, $kSecret, true);
+                $kRegion = hash_hmac('sha256', $aws_region, $kDate, true);
+                $kService = hash_hmac('sha256', $aws_service_name, $kRegion, true);
+                $kSigning = hash_hmac('sha256', 'aws4_request', $kService, true);
+    
+                // Signature
+                $signature = hash_hmac('sha256', $string_to_sign, $kSigning);
+    
+                // Authorization
+                $authorization = [
+                    'Credential=' . $aws_access_key_id . '/' . implode('/', $scope),
+                    'SignedHeaders=' . $signed_headers,
+                    'Signature=' . $signature
+                ];
+                $authorization = 'AWS4-HMAC-SHA256' . ' ' . implode( ',', $authorization);
+    
+                // Curl headers
+                $curl_headers = [ 'Authorization: ' . $authorization ];
+                foreach($request_headers as $key => $value) {
+                    $curl_headers[] = $key . ": " . $value; }
+    
+                $url = 'https://' . $host_name . '/' . $content_title;
+                $ch = curl_init($url);
+                curl_setopt($ch, CURLOPT_HEADER, false);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $curl_headers);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $content);
+                curl_exec($ch);
+                $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                // print $http_code;
+                if ($http_code != 200) { $pmessage ="failed"; }
                 
-                if ($posttype == "post") :
-                  $uploadurl="https://posting.mylykaapps.com/api/v3/posts/AddImagePost";
-                
-                else :
-                     $uploadurl = "https://momenting.mylykaapps.com/api/v3/moments/AddImageMoment";
-                endif;
-
-                usleep(100000);
-
-                if ($posttype == "post") :
-
-                 if ($accounttype != 'friends')
-                 {                
-                   $postresponse = postX($uploadurl, 
-                   payload($deviceid,
-                   '"files":[{
-                    "imageURL":"https://www.w3schools.com/Css/img_lights.jpg",
-                    "height":1024,
-                    "key":"'.$mediaID.'", 
-                    "RemoteStorage":"lyka-legacy-images-input" ,
-                    "type":"image","width":768}],
-                    "isHighlight":false,
-                    "isSharedLink":false,
-                    "mediaTags":"[[]]",
-                    title:"'.date("l").'",
-                    hashtags:"#LYKA #GEMs",
-                    content: "'.date("d-m-Y").'"'),
-                    $bearer);
-                  } else
+                $delURL = "https://lyka-legacy-images-input.s3.ap-southeast-1.amazonaws.com/".$mediaID;
+                $delHeader = array(
+                    "x-clientid: $deviceid",
+                    "x-amz-date: $timestamp",
+                    "x-amz-content-sha256: STREAMING-AWS4-HMAC-SHA256-PAYLOAD",
+                    "Authorization: $authorization"
+                );
+                $deleteCurlx = curl_init($delURL);
+                curl_setopt($deleteCurlx, CURLOPT_URL, $delURL);
+                curl_setopt($deleteCurlx, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($deleteCurlx, CURLOPT_CUSTOMREQUEST, "PUT");
+                curl_setopt($deleteCurlx, CURLOPT_HTTPHEADER, $delHeader);
+                $deleteResp = curl_exec($deleteCurlx);
+                curl_close($deleteCurlx);
+                 
+    
+                 usleep(100000);
+    
+                 if ($posttype == "post") :
+                     $uploadurl="https://posting.mylykaapps.com/api/v3/posts/AddImagePost";       
+                  if ($accounttype != 'friends')
                   {                
-                   $postresponse = postX($uploadurl, 
-                   payload($deviceid,
-                   '"files":[{
-                    "imageURL":"https://www.w3schools.com/Css/img_lights.jpg",
-                    "height":1024,
-                    "key":"'.$mediaID.'", 
-                    "RemoteStorage":"lyka-legacy-images-input" ,
-                    "type":"image","width":768}],
-                    "isHighlight":false,
-                    "isSharedLink":false,
-                    "mediaTags":"[[]]",
-                    title:"'.date("l").'",
-                    hashtags:"#ActiveLYKA'.date("l").'",
-                    content: "'.date("mdY").'"'),
-                    $bearer);
-                   } 
-                else : 
-                   $postresponse = postX($uploadurl, 
-                   payload($deviceid,
-                   '"files":[{
-                       "imageURL":"https://www.w3schools.com/Css/img_lights.jpg",
-                       "height":2081,
-                       "key":"'.$mediaID.'", 
-                       "RemoteStorage":"lyka-legacy-images-input" ,
-                       "type":"image",
-                       "width":1079}]'),
+                       $postresponse = postX($uploadurl, 
+                       payload($deviceid,
+                       '"files":[{
+                        "imageURL":"https://www.w3schools.com/Css/img_lights.jpg",
+                        "height":1024,
+                        "key":"'.$mediaID.'", 
+                        "RemoteStorage":"lyka-legacy-images-input" ,
+                        "type":"image","width":768}],
+                        "isHighlight":false,
+                        "isSharedLink":false,
+                        "mediaTags":"[[]]",
+                        title:"'.date("l").'",
+                        hashtags:"#LYKA #GEMs",
+                        content: "'.date("d-m-Y").'"'),
                         $bearer);
-                endif;
-
-                return $postresponse->message;
-
-            } //end post-json
-       }
-    }     
-
-}  //end of postmoments
-/////////////////////////////////////////////////////////////////////////////
-
+                      } else
+                      {                
+                       $postresponse = postX($uploadurl, 
+                       payload($deviceid,
+                       '"files":[{
+                        "imageURL":"https://www.w3schools.com/Css/img_lights.jpg",
+                        "height":1024,
+                        "key":"'.$mediaID.'", 
+                        "RemoteStorage":"lyka-legacy-images-input" ,
+                        "type":"image","width":768}],
+                        "isHighlight":false,
+                        "isSharedLink":false,
+                        "mediaTags":"[[]]",
+                        title:"'.date("l").'",
+                        hashtags:"#ActiveLYKA'.date("l").'",
+                        content: "'.date("mdY").'"'),
+                        $bearer);
+                       } 
+                 else : 
+                    $uploadurl = "https://momenting.mylykaapps.com/api/v3/moments/AddImageMoment"; 
+                    $postresponse = postX($uploadurl, 
+                    payload($deviceid,
+                    '"files":[{
+                        "imageURL":"https://www.w3schools.com/Css/img_lights.jpg",
+                        "height":2081,
+                        "key":"'.$mediaID.'", 
+                        "RemoteStorage":"lyka-legacy-images-input" ,
+                        "type":"image",
+                        "width":1079}]'),
+                         $bearer);
+                 endif;
+                    if ($postresponse != NULL)
+                    {
+                      // print "$postresponse->message";
+                       $pmessage='error';
+                       if ($postresponse->message == '323 - Post saved.')
+                           {
+                             $pmessage="saved";
+                           }
+                       if ($postresponse->message == 'Moment retrieved.')
+                           {
+                             $pmessage="saved";
+                           }
+                    } else {$pmessage="error"; }
+    
+                 return $pmessage;
+    
+             } else { return "error";} //end post-json
+        } else { return "error";}
+     }     
+    } else { return "error";}
+    
+    }  //end of postmoments
+    /////////////////////////////////////////////////////////////////////////////
+    
    ///////////////////////////////////////////
    // getuserID
    //
@@ -1698,9 +1729,34 @@ array_push($ratersaccount,"max4136");
 
 array_push($ratersaccount,"charlie0598");
 
+array_push($ratersaccount,"russo8935");
+array_push($ratersaccount,"ferrari8928");
+array_push($ratersaccount,"esposito8934");
+array_push($ratersaccount,"bianchi8940");
+array_push($ratersaccount,"romano8939");
+
+array_push($ratersaccount,"colombo8943");
+array_push($ratersaccount,"ricci8941");
+array_push($ratersaccount,"marino8946");
+array_push($ratersaccount,"greco8944");
+array_push($ratersaccount,"bruno8974");
+
+array_push($ratersaccount,"gallo8953");
+array_push($ratersaccount,"conti8973");
+array_push($ratersaccount,"luca8982");
+array_push($ratersaccount,"mancini8980");
+array_push($ratersaccount,"costa8975");
+
+array_push($ratersaccount,"gio8966");
+array_push($ratersaccount,"riz8969");
+array_push($ratersaccount,"lom8964");
+array_push($ratersaccount,"mor8968");
+array_push($ratersaccount,"barb8962");
+array_push($ratersaccount,"font8652");
 
 
-$ScriptName ="LYKA Menu updated [01.25.22]\n© 2022 LYKAPRO dev team";
+
+$ScriptName ="LYKA Menu [01.28.22]\n© 2022 LYKAPRO dev team";
 
 print "$White";
 print "$ScriptName\n";
