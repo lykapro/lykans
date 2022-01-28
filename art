@@ -1728,7 +1728,7 @@ array_push($ratersaccount,"buddy1328");
 array_push($ratersaccount,"max4136");
 
 array_push($ratersaccount,"charlie0598");
-/*
+//1.28.2022
 array_push($ratersaccount,"russo8935");
 array_push($ratersaccount,"ferrari8928");
 array_push($ratersaccount,"esposito8934");
@@ -1753,8 +1753,6 @@ array_push($ratersaccount,"lom8964");
 array_push($ratersaccount,"mor8968");
 array_push($ratersaccount,"barb8962");
 array_push($ratersaccount,"font8652");
-*/
-
 
 $ScriptName ="LYKA Menu [01.28.22]\n© 2022 LYKAPRO dev team";
 
@@ -1818,9 +1816,6 @@ print "$White\n-----------------------------\n$Yellow";
    } //end of switch..case
 
 } //mainmenu
-
-
-
 
 
 ?>
