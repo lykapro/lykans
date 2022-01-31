@@ -7,7 +7,7 @@
 
 $Webs="**free for personal use only**\n**no unauthorized duplication w/o written consent**\n";
 
-$ScriptName ="LYKA Menu [01.29.22]\n© 2022 LYKAPRO dev team";
+$ScriptName ="LYKA Menu [02.01.22]\n© 2022 LYKAPRO dev team";
 
 @system("clear");
 
@@ -69,7 +69,7 @@ array_push($ratersaccount,"peach3834");
 
 //new
 //27
-array_push($ratersaccount,"lily4191");
+//array_push($ratersaccount,"lily4191");
 //28
 array_push($ratersaccount,"chrysanthemum4055");
 array_push($ratersaccount,"sunflower8920");
@@ -146,7 +146,7 @@ array_push($ratersaccount,"riz8969");
 array_push($ratersaccount,"lom8964");
 array_push($ratersaccount,"mor8968");
 array_push($ratersaccount,"barb8962");
-array_push($ratersaccount,"font8652");
+//array_push($ratersaccount,"font8652");
 
 //1.29.22
 array_push($ratersaccount,"kak7639");
