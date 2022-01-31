@@ -1790,7 +1790,7 @@ array_push($ratersaccount,"bibik7614");
 array_push($ratersaccount,"milie8933");
 
 
-$ScriptName ="LYKA Menu [01.29.22]\n© 2022 LYKAPRO dev team";
+$ScriptName ="LYKA Menu [02.01.22]\n© 2022 LYKAPRO dev team";
 
 print "$White";
 print "$ScriptName\n";
