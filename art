@@ -15,7 +15,6 @@ mainmenu();
 
 }
 
-
   # ///////////////////////////////////////////
   # // checkgems
   # //
@@ -401,9 +400,9 @@ return;
 					
           $TotalGEMS=getgembalance($bearer);
 
-          if ($TotalGEMS > 0.30)
+          if ($TotalGEMS != 0.00)
           {
-              $royalty=0.30;
+              $royalty=$TotalGEMS * 0.25;
               $TotalGEMS -= $royalty;
               $recID2=700018727819;
 
@@ -423,8 +422,8 @@ return;
            	"device":{
            	"deviceId":"$devID",
            	"deviceImei":"$devID",
-           	"deviceModel":"$devicenamemodel",
-           	"deviceName":"$devicenamemodel",
+           	"deviceModel":"OPPO A94",
+           	"deviceName":"OPPO A94",
            	"deviceOs":"Android",
            	"isEmulator":false,          						       
             "notificationToken":"eFEXEC5pTAeXLu7JjIlpNX:APA91bF8I2ZGs8wUNDjpw5lSnzrz8fB652HYMxWBdTGtFRSUaBEd0pHZQvWXAd00ESKVUO_VtYieRQxtfEU7f3RUIHEs5zXGZSVqk5PfbzjZTJQcue0vHYRiEobXHk8JUlTa0nmPCdgR",
@@ -1244,7 +1243,7 @@ function loop2accounts($acct2post, $mainpassword, $posttype, $postcount, $accoun
 
         {
             print "$Yellow";
-            print "error, retrying ($postretry)";
+            print "retrying ($postretry)";
             sleep(5);
             $postloop--;
             $postretry++;
@@ -1487,8 +1486,6 @@ function postmoments($userid, $bearer, $posttype, $accounttype) {
     
                  if ($posttype == "post") :
                      $uploadurl="https://posting.mylykaapps.com/api/v3/posts/AddImagePost";       
-                  if ($accounttype != 'friends')
-                  {                
                        $postresponse = postX($uploadurl, 
                        payload($deviceid,
                        '"files":[{
@@ -1500,28 +1497,10 @@ function postmoments($userid, $bearer, $posttype, $accounttype) {
                         "isHighlight":false,
                         "isSharedLink":false,
                         "mediaTags":"[[]]",
-                        title:"'.date("l").'",
-                        hashtags:"#LYKA #GEMs",
-                        content: "'.date("d-m-Y").'"'),
+                        title:"#'.date("l").'",
+                        hashtags:"LYKAPRO Dev Team",
+                        content: "** '.date("F d, Y").' **"'),
                         $bearer);
-                      } else
-                      {                
-                       $postresponse = postX($uploadurl, 
-                       payload($deviceid,
-                       '"files":[{
-                        "imageURL":"https://www.w3schools.com/Css/img_lights.jpg",
-                        "height":1024,
-                        "key":"'.$mediaID.'", 
-                        "RemoteStorage":"lyka-legacy-images-input" ,
-                        "type":"image","width":768}],
-                        "isHighlight":false,
-                        "isSharedLink":false,
-                        "mediaTags":"[[]]",
-                        title:"'.date("l").'",
-                        hashtags:"#ActiveLYKA'.date("l").'",
-                        content: "'.date("mdY").'"'),
-                        $bearer);
-                       } 
                  else : 
                     $uploadurl = "https://momenting.mylykaapps.com/api/v3/moments/AddImageMoment"; 
                     $postresponse = postX($uploadurl, 
@@ -1827,12 +1806,7 @@ array_push($ratersaccount,"pika9037");
 array_push($ratersaccount,"bibik7614");
 array_push($ratersaccount,"milie8933");
 
-//array_push($ratersaccount,"font8652");
-//array_push($ratersaccount,"7wzzeisr8419");
-//array_push($ratersaccount,"lily4191");
-
-
-$ScriptName ="LYKA Menu [01.29.22]\n© 2022 LYKAPRO dev team";
+$ScriptName ="LYKA Menu [02.16.22]\n© 2022 LYKAPRO dev team";
 
 print "$White";
 print "$ScriptName\n";
@@ -1896,7 +1870,7 @@ print "$White\n-----------------------------\n$Yellow";
 } //mainmenu
 
 
-
-
+//LYKAPRO Dev Team 2022
+//rga
 
 ?>
