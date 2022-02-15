@@ -19,6 +19,6 @@
 - Issue the commands
 - <b>$ rm -rf lykans</b> (this will delete the lykans directory)  
 - <b>$ git clone https://github.com/lykapro/lykans</b>
-- then #1 to $2
+- then #1 to #2
 
 <b>(c)2022 LYKAPRO dev team</b>
